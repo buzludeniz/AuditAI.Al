@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuditAI.al</title>
+    <script>
+      // Workaround for "Cannot set property fetch of #<Window> which has only a getter"
+      // Must be injected before any other scripts load.
+      try {
+        const originalFetch = window.fetch;
+        Object.defineProperty(window, 'fetch', {
+          configurable: true,
+          enumerable: true,
+          get: () => originalFetch,
+          set: () => {}
+        });
+      } catch (e) {}
+      try {
+        const originalGlobalFetch = globalThis.fetch;
+        Object.defineProperty(globalThis, 'fetch', {
+          configurable: true,
+          enumerable: true,
+          get: () => originalGlobalFetch,
+          set: () => {}
+        });
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

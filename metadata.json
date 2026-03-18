@@ -1,0 +1,5 @@
+{
+  "name": "AuditAI.al",
+  "description": "Albanian fiscal audit assistant analyzing e-Faktura CSV exports to identify tax risks.",
+  "requestFramePermissions": []
+}
