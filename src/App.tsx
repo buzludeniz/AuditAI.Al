@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import UploadZone from './components/UploadZone';
 import ReportDashboard from './components/ReportDashboard';
-import { analyzeCSV } from './components/AuditEngine';
+import { analyzeCSV } from './lib/api';
 import { AuditReport } from './types';
 
 export default function App() {

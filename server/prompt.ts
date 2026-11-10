@@ -1,9 +1,6 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { AuditReport } from "../types";
+import { Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
-const SYSTEM_INSTRUCTION = `You are AuditAI.al — an AI-powered fiscal audit assistant built specifically for Albanian businesses and accountants. You analyze e-Faktura exports and income declarations to identify tax risk before a DPT (Drejtoria e Përgjithshme e Tatimeve) audit occurs.
+export const SYSTEM_INSTRUCTION = `You are AuditAI.al — an AI-powered fiscal audit assistant built specifically for Albanian businesses and accountants. You analyze e-Faktura exports and income declarations to identify tax risk before a DPT (Drejtoria e Përgjithshme e Tatimeve) audit occurs.
 
 LANGUAGE RULE:
 Always respond in Albanian. Use clear, plain Albanian — not legal jargon.
@@ -41,7 +38,7 @@ RISK SCORING (0–100):
 - Critical flag: +25 points
 Cap at 100. Minimum score is 5.`;
 
-const responseSchema = {
+export const responseSchema = {
   type: Type.OBJECT,
   properties: {
     risk_score: { type: Type.INTEGER },
@@ -82,22 +79,3 @@ const responseSchema = {
   },
   required: ["risk_score", "risk_level", "summary", "flags", "recommendations", "disclaimer"]
 };
-
-export async function analyzeCSV(csvContent: string): Promise<AuditReport> {
-  const response = await ai.models.generateContent({
-    model: "gemini-3.1-pro-preview",
-    contents: `Please analyze the following e-Faktura CSV export and generate a risk report:\n\n${csvContent}`,
-    config: {
-      systemInstruction: SYSTEM_INSTRUCTION,
-      responseMimeType: "application/json",
-      responseSchema: responseSchema,
-      temperature: 0.1,
-    }
-  });
-
-  if (!response.text) {
-    throw new Error("No response received from Gemini.");
-  }
-
-  return JSON.parse(response.text) as AuditReport;
-}
